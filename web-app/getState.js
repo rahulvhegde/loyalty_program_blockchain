@@ -35,6 +35,11 @@ async function he() {
     member = JSON.parse(JSON.parse(member.toString()));
     console.log(member);
 
+    let member = await contract.submitTransaction('GetState', 'all-members');
+    member = JSON.parse(JSON.parse(member.toString()));
+    console.log(member);
+
+
     // Disconnect from the gateway.
     await gateway2.disconnect();
   }

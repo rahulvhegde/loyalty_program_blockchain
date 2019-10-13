@@ -347,7 +347,7 @@ module.exports = {
   * Perform SendPoints transaction
   * @param {String} cardId Card id to connect to network
   * @param {String} accountNumber Account number of member
-  * @param {String} partnerId Partner Id of partner
+  * @param {String} phoneNumber phoneNumber of member
   * @param {Integer} points Points value
   */
  sendPointsTransaction: async function (cardId, accountNumber, phoneNumber, points) {
@@ -375,7 +375,7 @@ module.exports = {
 
     // Submit the specified transaction.
     console.log('\nSubmit SendPoints transaction.');
-    const usePointsResponse = await contract.submitTransaction('SendPoints', JSON.stringify(sendPoints));
+    const sendPointsResponse = await contract.submitTransaction('SendPoints', JSON.stringify(sendPoints));
     console.log('sendPointsResponse: ');
     console.log(JSON.parse(sendPointsResponse.toString()));
 
@@ -645,49 +645,7 @@ module.exports = {
     }
 
   },
-
-  /*
-  * Get all UsePoints transactions data
-  * @param {String} cardId Card id to connect to network
-  */
-  usePointsTransactionsInfo: async function (cardId, userType, userId) {
-
-    // Create a new file system based wallet for managing identities.
-    const walletPath = path.join(process.cwd(), '/wallet');
-    const wallet = new FileSystemWallet(walletPath);
-    console.log(`Wallet path: ${walletPath}`);
-
-    try {
-      // Create a new gateway for connecting to our peer node.
-      const gateway2 = new Gateway();
-      await gateway2.connect(ccp, { wallet, identity: cardId, discovery: gatewayDiscovery });
-
-      // Get the network (channel) our contract is deployed to.
-      const network = await gateway2.getNetwork('mychannel');
-
-      // Get the contract from the network.
-      const contract = network.getContract('customerloyalty');
-
-      console.log(`\nGet use points transactions state for ${userType} ${userId}`);
-      let usePointsTransactions = await contract.evaluateTransaction('UsePointsTransactionsInfo', userType, userId);
-      usePointsTransactions = JSON.parse(usePointsTransactions.toString());
-      console.log(usePointsTransactions);
-
-      // Disconnect from the gateway.
-      await gateway2.disconnect();
-
-      return usePointsTransactions;
-    }
-    catch(err) {
-      //print and return error
-      console.log(err);
-      var error = {};
-      error.error = err.message;
-      return error
-    }
-
-  },
-
+      
   /*
   * Get all SendPoints transactions data
   * @param {String} cardId Card id to connect to network
